@@ -35,6 +35,39 @@ for(let i = 0; i < cycleCount; i++)
     yMovePos = 0;
 }
 
+// Set line width
+context.lineWidth = 10;
+context.fillStyle = 'black';
+
+// Wall
+xMovePos += 10;
+yMovePos = 200;
+context.strokeRect(xStartPos + xMovePos, yStartPos + yMovePos, 150, 110);
+
+// Door
+xMovePos += 55;
+yMovePos += 50;
+context.fillRect(xStartPos + xMovePos, yStartPos + yMovePos, 40, 60);
+
+// Roof
+context.beginPath();
+
+xMovePos -= 80;
+yMovePos -= 50;
+
+context.moveTo(xStartPos + xMovePos, yStartPos + yMovePos);
+
+xMovePos += 200;
+yMovePos += 0;
+
+context.lineTo(xStartPos + xMovePos, yStartPos + yMovePos);
+
+xMovePos -= 100;
+yMovePos -= 70;
+
+context.lineTo(xStartPos + xMovePos, yStartPos + yMovePos);
+context.closePath();
+context.stroke();
 
 let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
