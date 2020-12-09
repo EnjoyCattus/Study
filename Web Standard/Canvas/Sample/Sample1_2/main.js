@@ -37,14 +37,14 @@ drawKey = axiom;
 context.fillStyle = 'rgba(255, 255, 255, 0.2)';
 context.font = '12px serif';
 
-let next = '';
-const CYCLE_COUNT = 1;
+const CYCLE_COUNT = 3;
 
 context.fillText(drawKey, xStartPos + xMovePos, yStartPos + yMovePos);
 yMovePos += 30;
 
 for(let j = 0; j < CYCLE_COUNT; j++)
 {
+    let next = '';
     for(let i = 0; i < drawKey.length; i++)
     {
         let current = drawKey.charAt(i);
@@ -80,18 +80,90 @@ yMovePos = 0;
 context.strokeStyle = 'rgba(255, 255, 255, 0.8)';
 
 let len = 100;
-const MAX_ANGLE = 360;
+let angle = 25;
 
 context.beginPath();
+
 context.moveTo(xStartPos, yStartPos);
+context.translate(xStartPos, yStartPos);
+
+let points = [];
+let angle_move = 0;
+
+for(let i = 0; i < drawKey.length; i++)
+{
+    let current = drawKey.charAt(i);
+
+    if(current == 'F')
+    {
+        yMovePos -= len;
+        context.lineTo(xMovePos, -len);
+        context.translate(xMovePos, -len);
+        context.stroke();
+    }
+    else if(current == '+')
+    {
+        angle_move += angle;
+        context.rotate(Math.PI / 180 * angle);
+    }
+    else if(current == '-')
+    {
+        angle_move -= angle;
+        context.rotate(Math.PI / 180 * -angle);
+    }
+    else if(current == '[')
+    {
+        let temp = {
+            x : xMovePos,
+            y : yMovePos,
+            degree : angle_move
+        };
+        points.push(temp);
+        
+        context.save();
+    }
+    else if(current == ']')
+    {
+        let point = points.pop();
+        
+        xMovePos = point.x;
+        yMovePos = point.y;
+        angle_move = point.degree;
+
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.moveTo(xStartPos + xMovePos, yStartPos + yMovePos);
+        context.translate(xStartPos, yStartPos + yMovePos);
+        context.rotate(Math.PI / 180 * angle_move);
+        context.restore();
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 // yMovePos -= len;
-// context.lineTo(xStartPos, yStartPos + yMovePos);
+// context.lineTo(xStartPos, yMovePos);
+
+
+// context.rotate(Math.PI / 180 * 22.5);
+
+// yMovePos -= len;
+// context.lineTo(xStartPos, yMovePos);
+
+//context.lineTo(0, -len);
+//context.translate(xStartPos, yStartPos);
 
 // yMovePos -= len;
 // context.lineTo(xStartPos, yStartPos + yMovePos);
 // console.log(context);
-// context.rotate(Math.PI / 180 * 60);
+
 // context.rotate(Math.PI / 180 * 60);
 // console.log(context);
 // context.rotate(MAX_ANGLE / 6);
@@ -101,44 +173,7 @@ context.moveTo(xStartPos, yStartPos);
 
 // context.stroke();
 
-// let points = [];
 
-for(let i = 0; i < drawKey.length; i++)
-{
-    let current = drawKey.charAt(i);
-
-    if(current == 'F')
-    {
-        yMovePos -= len;
-        context.lineTo(xStartPos + xMovePos, yStartPos + yMovePos);
-        // context.translate(xStartPos + xMovePos, yStartPos + yMovePos);
-    }
-    else if(current == '+')
-    {
-        context.rotate(Math.PI / 6);
-    }
-    else if(current == '-')
-    {
-        context.rotate(-Math.PI / 6);
-    }
-    else if(current == '[')
-    {
-        // let temp = {
-        //     x : xMovePos,
-        //     y : yMovePos
-        // };
-        // points.push(temp);
-        context.save();
-    }
-    else if(current == ']')
-    {
-        // let point = points.pop();
-        // xMovePos = point.x;
-        // yMovePos = point.y;
-
-        context.restore();
-    }
-}
 
 context.stroke();
 
